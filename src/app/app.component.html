@@ -3,8 +3,8 @@
     padding: 6px;
     margin: 0px;
     font-size: 22px;
-    background-color: black;
-    color: grey;
+    background-color:white;
+    color: black;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
  .response {
@@ -12,14 +12,14 @@
     background-color: darkmagenta;
   }
 
-  input {
-    width:90%;
+  input,select {
+    width:200px;
     height:30px;
     font-size: 22px;
-    border-style: hidden;
-    background-color: #cdc3c3;
+    border-style: visible;
+    background-color: wheat;
     color: rgb(10, 9, 9);
-    outline-width: 0px;
+    outline-width: 1px;
   }
 </style>
 
@@ -29,30 +29,19 @@
     
         <div *ngFor="let element of jsonResult">
           <div><hr></div>
-          <div>{{ element.table_name }}&nbsp;&nbsp;{{ element.table_type }}</div>
-          <!-- <div class="response">{{ element.response }}</div> -->
+          <div (click)="element.open=!element.open">{{ element.table_name }}&nbsp;&nbsp;{{ element.table_type }}
+            <input type="text" id="filter_template" [(ngModel)]="element.filter_template" (ngModelChange)="anyChange($event)" /></div>
+          <div *ngIf="element.open">  
+            <div *ngFor="let field of element.fields">{{field.field_name}}&nbsp;&nbsp;{{field.field_type}}
+              <input type="checkbox" [(ngModel)]="field.checked" (ngModelChange)="anyChange($event)"> 
+              <select id="filter" [(ngModel)]="field.selectedFilter" (ngModelChange)="anyChange($event)">
+                <option *ngFor="let filter of filterTypes" [value]="filter">{{ filter }}</option>
+              </select>&nbsp;&nbsp;
+              <input type="text" id="filtervalue" [(ngModel)]="field.filter_values" (ngModelChange)="anyChange($event)" />
+            </div> 
         </div>
 
     <!-- <input type="text" [(ngModel)]="commandString" (keypress)="enterCommand($event)"> -->
   </div>
 </div>
-
-<!-- <p> <button (click)="wsClick()">WS Send</button></p>
-<button (click)="buttonClick()">Http Send</button> -->
-<!-- <div>
-   
-    <p >{{ result?.message }}  {{ result?.count }}</p>
-    <textarea [(ngModel)]="taContent"></textarea>
-   
-   <table>
-    <tr><th>Client</th><th>Server</th></tr>
-    <tbody>
-    <tr *ngFor="let comment of comments">
-      <td>{{ comment.client }}</td>
-      <td>{{ comment.server }}</td>
-    </tr>
-  </tbody>
-  </table>
-  </div> -->
-<!-- <router-outlet></router-outlet> -->
 
