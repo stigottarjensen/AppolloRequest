@@ -1,47 +1,29 @@
-<style>
-  div {
-    padding: 6px;
-    margin: 0px;
-    font-size: 22px;
-    background-color:white;
-    color: black;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
- .response {
-    color: yellow;
-    background-color: darkmagenta;
-  }
-
-  input,select {
-    width:200px;
-    height:30px;
-    font-size: 22px;
-    border-style: visible;
-    background-color: wheat;
-    color: rgb(10, 9, 9);
-    outline-width: 1px;
-  }
-</style>
-
 <div>
   <div style="width:95%; height:85%; overflow: auto;">
     <div style="width:100%">
-    
-        <div *ngFor="let element of jsonResult">
-          <div><hr></div>
-          <div (click)="element.open=!element.open">{{ element.table_name }}&nbsp;&nbsp;{{ element.table_type }}
-            <input type="text" id="filter_template" [(ngModel)]="element.filter_template" (ngModelChange)="anyChange($event)" /></div>
-          <div *ngIf="element.open">  
-            <div *ngFor="let field of element.fields">{{field.field_name}}&nbsp;&nbsp;{{field.field_type}}
-              <input type="checkbox" [(ngModel)]="field.checked" (ngModelChange)="anyChange($event)"> 
-              <select id="filter" [(ngModel)]="field.selectedFilter" (ngModelChange)="anyChange($event)">
-                <option *ngFor="let filter of filterTypes" [value]="filter">{{ filter }}</option>
-              </select>&nbsp;&nbsp;
-              <input type="text" id="filtervalue" [(ngModel)]="field.filter_values" (ngModelChange)="anyChange($event)" />
-            </div> 
+
+      <div *ngFor="let element of jsonResult">
+        <div>
+          <hr>
         </div>
-
-    <!-- <input type="text" [(ngModel)]="commandString" (keypress)="enterCommand($event)"> -->
-  </div>
-</div>
-
+        <div><span (click)="element.open=!element.open">{{ element.table_name }}&nbsp;&nbsp;{{ element.table_type }}</span>
+          <input type="text" id="filter_template" *ngIf="element.open" [(ngModel)]="element.RTW.PAYLOAD.template"
+            (ngModelChange)="templateChange($event, element)" />
+        </div>
+        <div class="container" *ngIf="element.open">
+          <table>
+            <tr *ngFor="let field of element.fields">
+              <td>{{field.field_name}}</td>
+              <td>{{field.field_type}}</td>
+              <td> <input type="checkbox" [(ngModel)]="field.checked" (ngModelChange)="checkChange($event, field, element)"> </td>
+              <td> <select id="filter" [(ngModel)]="field.selectedFilter" (ngModelChange)="selectChange($event, field, element)">
+                  <option *ngFor="let filter of filterTypes" [value]="filter">{{ filter }}</option>
+                </select></td>
+              <td><input type="text" id="filtervalue" [(ngModel)]="field.filter_values"
+                  (keyup.enter)="filterValueChange($event, field, element)" /></td>
+            </tr>
+          </table>
+          <div>{{element.strRTW}}</div>
+        </div>
+      </div>
+    </div>

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class AppComponent implements OnInit {
   title = 'AppolloRequest';
   jsonResult: any = 'empty';
-  filterTypes: string[] = ['none', 'equal', 'in', 'like', 'between'];
+  filterTypes: string[] = ['equal', 'in', 'like', 'between'];
   rtw: any = {
     RTW: {
       TIMESTAMP: '',
@@ -41,7 +41,8 @@ export class AppComponent implements OnInit {
         this.jsonResult.forEach((element: any) => {
           element.open = false;
           element.filter_template = '';
-          element.RTW = JSON.parse(JSON.stringify(this.rtw.RTW));
+          element.strRTW = JSON.stringify(this.rtw.RTW, null, '  ');
+          element.RTW = JSON.parse(element.strRTW);
           element.RTW.PAYLOAD.request_name = element.table_name;
           element.fields.forEach((field: any) => {
             field.checked = false;
@@ -53,7 +54,42 @@ export class AppComponent implements OnInit {
       });
   }
 
-  anyChange(event: any) {
+  templateChange(event: any, element: any) {
+    element.strRTW = JSON.stringify(element.RTW, null, '  ');
+  }
+
+  checkChange(event: any, field: any, element: any) {
+    if (event) element.RTW.PAYLOAD.fields.push(field.field_name);
+    else
+      element.RTW.PAYLOAD.fields = element.RTW.PAYLOAD.fields.filter(
+        (f: string) => f !== field.field_name
+      );
+    element.strRTW = JSON.stringify(element.RTW, null, '  ');
+  }
+
+  selectChange(event: any, field: any, element: any) {
     console.log(event);
+    const fi = element.RTW.PAYLOAD.filters.filter(
+      (f: any) => f.fields === field.field_name
+    );
+    if (fi.length > 0) fi[0].type = event;
+    element.strRTW = JSON.stringify(element.RTW, null, '  ');
+  }
+
+  filterValueChange(event: any, field: any, element: any) {
+    console.log(event);
+    const fi = element.RTW.PAYLOAD.filters.filter(
+      (f: any) => f.fields === field.field_name
+    );
+    if (fi.length > 0) fi[0].values.push(...event.split(' '));
+    else {
+      element.RTW.PAYLOAD.filters.push({
+        fields: field.field_name,
+        values: [field.filter_values],
+        type: field.selectedFilter,
+      });
+    }
+
+    element.strRTW = JSON.stringify(element.RTW, null, '  ');
   }
 }

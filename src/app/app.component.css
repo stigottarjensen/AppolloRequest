@@ -1,0 +1,29 @@
+div {
+    padding: 6px;
+    margin: 0px;
+    font-size: 22px;
+    background-color: white;
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .response {
+    color: yellow;
+    background-color: darkmagenta;
+  }
+
+  input,
+  select {
+    width: 200px;
+    height: 30px;
+    font-size: 22px;
+    border-style: visible;
+    background-color: #fdf8f0;
+    color: rgb(10, 9, 9);
+    outline-width: 1px;
+  }
+
+  .container {
+    display: flex; 
+    justify-content: flex-start;
+  }
