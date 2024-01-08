@@ -6,7 +6,8 @@
         <div>
           <hr>
         </div>
-        <div><span (click)="element.open=!element.open">{{ element.table_name }}&nbsp;&nbsp;{{ element.table_type }}</span>
+        <div><span (click)="element.open=!element.open">{{ element.table_name }}&nbsp;&nbsp;{{ element.table_type
+            }}</span>
           <input type="text" id="filter_template" *ngIf="element.open" [(ngModel)]="element.RTW.PAYLOAD.template"
             (ngModelChange)="templateChange($event, element)" />
         </div>
@@ -15,12 +16,19 @@
             <tr *ngFor="let field of element.fields">
               <td>{{field.field_name}}</td>
               <td>{{field.field_type}}</td>
-              <td> <input type="checkbox" [(ngModel)]="field.checked" (ngModelChange)="checkChange($event, field, element)"> </td>
-              <td> <select id="filter" [(ngModel)]="field.selectedFilter" (ngModelChange)="selectChange($event, field, element)">
+              <td> <input type="checkbox" [(ngModel)]="field.checked"
+                  (ngModelChange)="checkChange($event, field, element)"> </td>
+              <td> <select id="filter" [(ngModel)]="field.selectedFilter"
+                  (ngModelChange)="selectChange($event, field, element)">
                   <option *ngFor="let filter of filterTypes" [value]="filter">{{ filter }}</option>
                 </select></td>
-              <td><input type="text" id="filtervalue" [(ngModel)]="field.filter_values"
-                  (keyup.enter)="filterValueChange($event, field, element)" /></td>
+              <td>
+                <input type="text" [(ngModel)]="field.filter_values" *ngIf="field.field_type==='text'"
+                  (ngModelChange)="filterValueChange($event, field, element)" />
+                <span *ngFor="let nr of field.filter_number_values; let i=index">
+                 {{i}} <input type="number" [(ngModel)]="field.filter_number_values[i]"
+                    (ngModelChange)="filterNumberValueChange($event, field, element)" /></span>
+              </td>
             </tr>
           </table>
           <div>{{element.strRTW}}</div>

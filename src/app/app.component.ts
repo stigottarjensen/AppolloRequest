@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   title = 'AppolloRequest';
   jsonResult: any = 'empty';
   filterTypes: string[] = ['equal', 'in', 'like', 'between'];
+  fieldType = [];
   rtw: any = {
     RTW: {
       TIMESTAMP: '',
@@ -46,8 +47,11 @@ export class AppComponent implements OnInit {
           element.RTW.PAYLOAD.request_name = element.table_name;
           element.fields.forEach((field: any) => {
             field.checked = false;
-            field.selectedFilter = 'none';
+            field.selectedFilter = 'equal';
             field.filter_values = '';
+            field.filter_number_values =
+              field.field_type === 'number' ? [0, 0, 0, 0, 0] : [];
+            field.filter_date_values = [0, 0];
           });
         });
         console.log(this.jsonResult);
@@ -73,23 +77,54 @@ export class AppComponent implements OnInit {
       (f: any) => f.fields === field.field_name
     );
     if (fi.length > 0) fi[0].type = event;
-    element.strRTW = JSON.stringify(element.RTW, null, '  ');
+    // element.strRTW = JSON.stringify(element.RTW, null, '  ');
+    if (field.felt_type === 'number')
+      this.filterNumberValueChange(
+        ' number: called by selectChange',
+        field,
+        element
+      );
+    else this.filterValueChange('text: called by selectChange', field, element);
   }
 
   filterValueChange(event: any, field: any, element: any) {
     console.log(event);
+    const splitCount = field.selectedFilter === 'between' ? 2 : 50;
+    const splitted: boolean =
+      field.selectedFilter === 'in' || field.selectedFilter === 'between';
+    const cleanFilterValues = field.filter_values.replace(/\s+/g, ' ').trim();
     const fi = element.RTW.PAYLOAD.filters.filter(
       (f: any) => f.fields === field.field_name
     );
-    if (fi.length > 0) fi[0].values.push(...event.split(' '));
+    if (fi.length > 0)
+      fi[0].values = splitted
+        ? cleanFilterValues.split(' ', splitCount)
+        : [cleanFilterValues];
     else {
       element.RTW.PAYLOAD.filters.push({
         fields: field.field_name,
-        values: [field.filter_values],
+        values: splitted
+          ? cleanFilterValues.split(' ', splitCount)
+          : [cleanFilterValues],
         type: field.selectedFilter,
       });
     }
+    element.strRTW = JSON.stringify(element.RTW, null, '  ');
+  }
 
+  filterNumberValueChange(event: any, field: any, element: any) {
+    console.log(event);
+    const fi = element.RTW.PAYLOAD.filters.filter(
+      (f: any) => f.fields === field.field_name
+    );
+    if (fi.length > 0) fi[0].values = field.filter_number_values;
+    else {
+      element.RTW.PAYLOAD.filters.push({
+        fields: field.field_name,
+        values: field.filter_number_values,
+        type: field.selectedFilter,
+      });
+    }
     element.strRTW = JSON.stringify(element.RTW, null, '  ');
   }
 }
