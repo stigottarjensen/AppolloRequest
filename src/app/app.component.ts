@@ -42,6 +42,7 @@ export class AppComponent implements OnInit {
         this.jsonResult.forEach((element: any) => {
           element.open = false;
           element.filter_template = '';
+          element.filter_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9];
           element.strRTW = JSON.stringify(this.rtw.RTW, null, '  ');
           element.RTW = JSON.parse(element.strRTW);
           element.RTW.PAYLOAD.request_name = element.table_name;
@@ -52,7 +53,6 @@ export class AppComponent implements OnInit {
             field.filter_number_values = '';
             field.to_date = '';
             field.filter_date_values = [0, 0];
-            field.filter_ids = [1,2,3,4,5,6,7,8,9];
           });
         });
         console.log(this.jsonResult);
@@ -82,29 +82,35 @@ export class AppComponent implements OnInit {
   }
 
   filterValueChange(event: any, field: any, element: any) {
-    console.log(field,element);
-    
     if (!event || event === '') {
-      element.RTW.PAYLOAD.filters.filter((element: any) => {
-        element.field !== field.field_name;
+      const rem = element.RTW.PAYLOAD.filters.filter((e: any) => {
+        e.field === field.field_name;
       });
+      element.filters_ids.unshift(rem[0].id);
+      element.RTW.PAYLOAD.filters = element.RTW.PAYLOAD.filters.filter(
+        (e: any) => {
+          e.field !== field.field_name;
+        }
+      );
+      element.strRTW = JSON.stringify(element.RTW, null, '  ');
       return;
     }
+
     const splitCount = field.selectedFilter === 'between' ? 2 : 50;
     const splitted: boolean =
       field.selectedFilter === 'in' || field.selectedFilter === 'between';
     const cleanFilterValues = field.filter_values.replace(/\s+/g, ' ').trim();
     const fi = element.RTW.PAYLOAD.filters.filter(
-      (f: any) => f.fields === field.field_name
+      (f: any) => f.field === field.field_name
     );
 
     const arr = splitted
       ? cleanFilterValues.split(' ', splitCount)
       : [cleanFilterValues];
     const valueArr =
-      field.field_type === 'number' &&
-      (field.selectedFilter === 'in' || field.selectedFilter === 'between')
-        ? arr.map(Number)
+      field.field_type === 'number'
+        ? // && (field.selectedFilter === 'in' || field.selectedFilter === 'between')
+          arr.map(Number)
         : arr;
 
     if (
@@ -114,13 +120,15 @@ export class AppComponent implements OnInit {
     )
       valueArr.push(field.to_date);
 
-    if (fi.length > 0) fi[0].values = valueArr;
-    else {
+    if (fi.length > 0) {
+      fi[0].values = valueArr;
+      fi[0].type = field.selectedFilter;
+    } else {
       element.RTW.PAYLOAD.filters.push({
-        fields: field.field_name,
+        field: field.field_name,
         values: valueArr,
         type: field.selectedFilter,
-        id: field.filter_ids.shift()
+        id: element.filter_ids.shift(),
       });
     }
     element.strRTW = JSON.stringify(element.RTW, null, '  ');
