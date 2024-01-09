@@ -52,6 +52,7 @@ export class AppComponent implements OnInit {
             field.filter_number_values = '';
             field.to_date = '';
             field.filter_date_values = [0, 0];
+            field.filter_ids = [1,2,3,4,5,6,7,8,9];
           });
         });
         console.log(this.jsonResult);
@@ -77,18 +78,18 @@ export class AppComponent implements OnInit {
       (f: any) => f.fields === field.field_name
     );
     if (fi.length > 0) fi[0].type = event;
-    // element.strRTW = JSON.stringify(element.RTW, null, '  ');
-    if (field.felt_type === 'number')
-      this.filterNumberValueChange(
-        ' number: called by selectChange',
-        field,
-        element
-      );
-    else this.filterValueChange('text: called by selectChange', field, element);
+    this.filterValueChange('text: called by selectChange', field, element);
   }
 
   filterValueChange(event: any, field: any, element: any) {
-    console.log(field.to_date);
+    console.log(field,element);
+    
+    if (!event || event === '') {
+      element.RTW.PAYLOAD.filters.filter((element: any) => {
+        element.field !== field.field_name;
+      });
+      return;
+    }
     const splitCount = field.selectedFilter === 'between' ? 2 : 50;
     const splitted: boolean =
       field.selectedFilter === 'in' || field.selectedFilter === 'between';
@@ -106,7 +107,11 @@ export class AppComponent implements OnInit {
         ? arr.map(Number)
         : arr;
 
-    if (field.selectedFilter === 'between' && field.to_date && field.to_date.length>4)
+    if (
+      field.selectedFilter === 'between' &&
+      field.to_date &&
+      field.to_date.length > 4
+    )
       valueArr.push(field.to_date);
 
     if (fi.length > 0) fi[0].values = valueArr;
@@ -115,22 +120,7 @@ export class AppComponent implements OnInit {
         fields: field.field_name,
         values: valueArr,
         type: field.selectedFilter,
-      });
-    }
-    element.strRTW = JSON.stringify(element.RTW, null, '  ');
-  }
-
-  filterNumberValueChange(event: any, field: any, element: any) {
-    console.log(field);
-    const fi = element.RTW.PAYLOAD.filters.filter(
-      (f: any) => f.fields === field.field_name
-    );
-    if (fi.length > 0) fi[0].values = field.filter_number_values;
-    else {
-      element.RTW.PAYLOAD.filters.push({
-        fields: field.field_name,
-        values: field.filter_number_values,
-        type: field.selectedFilter,
+        id: field.filter_ids.shift()
       });
     }
     element.strRTW = JSON.stringify(element.RTW, null, '  ');
