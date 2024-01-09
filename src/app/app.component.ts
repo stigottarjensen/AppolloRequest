@@ -49,8 +49,8 @@ export class AppComponent implements OnInit {
             field.checked = false;
             field.selectedFilter = 'equal';
             field.filter_values = '';
-            field.filter_number_values =
-              field.field_type === 'number' ? [0, 0, 0, 0, 0] : [];
+            field.filter_number_values = '';
+            field.to_date = '';
             field.filter_date_values = [0, 0];
           });
         });
@@ -88,7 +88,7 @@ export class AppComponent implements OnInit {
   }
 
   filterValueChange(event: any, field: any, element: any) {
-    console.log(event);
+    console.log(field.to_date);
     const splitCount = field.selectedFilter === 'between' ? 2 : 50;
     const splitted: boolean =
       field.selectedFilter === 'in' || field.selectedFilter === 'between';
@@ -96,16 +96,24 @@ export class AppComponent implements OnInit {
     const fi = element.RTW.PAYLOAD.filters.filter(
       (f: any) => f.fields === field.field_name
     );
-    if (fi.length > 0)
-      fi[0].values = splitted
-        ? cleanFilterValues.split(' ', splitCount)
-        : [cleanFilterValues];
+
+    const arr = splitted
+      ? cleanFilterValues.split(' ', splitCount)
+      : [cleanFilterValues];
+    const valueArr =
+      field.field_type === 'number' &&
+      (field.selectedFilter === 'in' || field.selectedFilter === 'between')
+        ? arr.map(Number)
+        : arr;
+
+    if (field.selectedFilter === 'between' && field.to_date && field.to_date.length>4)
+      valueArr.push(field.to_date);
+
+    if (fi.length > 0) fi[0].values = valueArr;
     else {
       element.RTW.PAYLOAD.filters.push({
         fields: field.field_name,
-        values: splitted
-          ? cleanFilterValues.split(' ', splitCount)
-          : [cleanFilterValues],
+        values: valueArr,
         type: field.selectedFilter,
       });
     }
@@ -113,7 +121,7 @@ export class AppComponent implements OnInit {
   }
 
   filterNumberValueChange(event: any, field: any, element: any) {
-    console.log(event);
+    console.log(field);
     const fi = element.RTW.PAYLOAD.filters.filter(
       (f: any) => f.fields === field.field_name
     );

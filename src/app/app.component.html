@@ -25,9 +25,19 @@
               <td>
                 <input type="text" [(ngModel)]="field.filter_values" *ngIf="field.field_type==='text'"
                   (ngModelChange)="filterValueChange($event, field, element)" />
-                <span *ngFor="let nr of field.filter_number_values; let i=index">
-                 {{i}} <input type="number" [(ngModel)]="field.filter_number_values[i]"
-                    (ngModelChange)="filterNumberValueChange($event, field, element)" /></span>
+                  <input type="text" [(ngModel)]="field.filter_values" *ngIf="field.field_type==='number'"
+                  (ngModelChange)="filterValueChange($event, field, element)" />
+                  <input type="date" [(ngModel)]="field.filter_values" *ngIf="field.field_type==='date'"
+                  (ngModelChange)="filterValueChange($event, field, element)" />
+                  <input type="date" [(ngModel)]="field.to_date" 
+                  *ngIf="field.field_type==='date' && field.selectedFilter==='between'"
+                  (ngModelChange)="filterValueChange($event, field, element)" />
+                  <!-- <span *ngIf="field.field_type==='number'">
+                  <span *ngFor="let nr of field.filter_number_values; let i=index">
+                    <input type="number" [id]="'number'+i" [(ngModel)]="field.filter_number_values[i]"
+                      (ngModelChange)="filterNumberValueChange($event, field, element)" />
+                    </span>
+                  </span> -->
               </td>
             </tr>
           </table>
