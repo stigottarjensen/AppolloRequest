@@ -43,8 +43,10 @@ export class AppComponent implements OnInit {
           element.open = false;
           element.filter_template = '';
           element.filter_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-          element.strRTW = JSON.stringify(this.rtw.RTW, null, '  ');
-          element.RTW = JSON.parse(element.strRTW);
+          element.strRTW =  '{"RTW":' + JSON.stringify(this.rtw.RTW, null, '  ')+'}';
+          console.log(element.strRTW);
+          
+          element.RTW = JSON.parse(JSON.stringify(this.rtw.RTW, null, '  '));
           element.RTW.PAYLOAD.request_name = element.table_name;
           element.fields.forEach((field: any) => {
             field.checked = false;
@@ -84,17 +86,16 @@ export class AppComponent implements OnInit {
   filterValueChange(event: any, field: any, element: any) {
     if (!event || event === '') {
       const rem = element.RTW.PAYLOAD.filters.filter((e: any) => {
-       return e.field === field.field_name;
+        return e.field === field.field_name;
       });
-  
-      
+
       element.filter_ids.unshift(rem[0].id);
       element.RTW.PAYLOAD.filters = element.RTW.PAYLOAD.filters.filter(
         (e: any) => {
           return e.field !== field.field_name;
         }
       );
-      element.strRTW = JSON.stringify(element.RTW, null, '  ');
+      element.strRTW = '{"RTW":' + JSON.stringify(element.RTW, null, '  ')+'}';
       return;
     }
 
@@ -133,15 +134,14 @@ export class AppComponent implements OnInit {
         id: element.filter_ids.shift(),
       });
     }
-    element.strRTW = JSON.stringify(element.RTW, null, '  ');
+    element.strRTW = '{"RTW":' + JSON.stringify(element.RTW, null, '  ')+'}';
   }
 
-  getFilterId(element:any, field_name:string):number{
+  getFilterId(element: any, field_name: string): number {
     const a = element.RTW.PAYLOAD.filters.filter(
       (f: any) => f.field === field_name
     );
-    if (a && a.length>0)
-      return a[0].id;
+    if (a && a.length > 0) return a[0].id;
     else return 0;
   }
 }
