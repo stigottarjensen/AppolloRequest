@@ -12,8 +12,7 @@ div {
     background-color: darkmagenta;
   }
 
-  input,
-  select {
+  input {
     width: 200px;
     height: 30px;
     font-size: 22px;
@@ -21,6 +20,19 @@ div {
     background-color: #fdf8f0;
     color: rgb(10, 9, 9);
     outline-width: 1px;
+    margin-left: 25px;
+  }
+
+  select {
+    width: 120px;
+    height: 30px;
+    font-size: 22px;
+    border-style: visible;
+    background-color: #e5f2ee;
+    color: rgb(10, 9, 9);
+    outline-width: 2px;
+    margin-right: 5px;
+    margin-left: 15px;
   }
 
   .container {

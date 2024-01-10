@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
   selectChange(event: any, field: any, element: any) {
     console.log(event);
     const fi = element.RTW.PAYLOAD.filters.filter(
-      (f: any) => f.fields === field.field_name
+      (f: any) => f.field === field.field_name
     );
     if (fi.length > 0) fi[0].type = event;
     this.filterValueChange('text: called by selectChange', field, element);
@@ -84,12 +84,14 @@ export class AppComponent implements OnInit {
   filterValueChange(event: any, field: any, element: any) {
     if (!event || event === '') {
       const rem = element.RTW.PAYLOAD.filters.filter((e: any) => {
-        e.field === field.field_name;
+       return e.field === field.field_name;
       });
-      element.filters_ids.unshift(rem[0].id);
+  
+      
+      element.filter_ids.unshift(rem[0].id);
       element.RTW.PAYLOAD.filters = element.RTW.PAYLOAD.filters.filter(
         (e: any) => {
-          e.field !== field.field_name;
+          return e.field !== field.field_name;
         }
       );
       element.strRTW = JSON.stringify(element.RTW, null, '  ');
@@ -132,5 +134,14 @@ export class AppComponent implements OnInit {
       });
     }
     element.strRTW = JSON.stringify(element.RTW, null, '  ');
+  }
+
+  getFilterId(element:any, field_name:string):number{
+    const a = element.RTW.PAYLOAD.filters.filter(
+      (f: any) => f.field === field_name
+    );
+    if (a && a.length>0)
+      return a[0].id;
+    else return 0;
   }
 }
