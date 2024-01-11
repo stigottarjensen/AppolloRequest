@@ -12,6 +12,10 @@ div {
     background-color: darkmagenta;
   }
 
+  button {
+    margin:10px;
+  }
+
   input {
     width: 200px;
     height: 30px;
@@ -21,6 +25,11 @@ div {
     color: rgb(10, 9, 9);
     outline-width: 1px;
     margin-left: 25px;
+  }
+
+  div > input {
+    width:400px;
+    height:35px;
   }
 
   select {

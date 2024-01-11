@@ -10,6 +10,7 @@
             }}</span>
           <input type="text" id="filter_template" *ngIf="element.open" [(ngModel)]="element.RTW.PAYLOAD.template"
             (ngModelChange)="templateChange($event, element)" />
+          <button (click)="buttonClick($event, element)">Get data</button>
         </div>
         <div class="container" *ngIf="element.open">
           <table>
@@ -33,12 +34,6 @@
                   <input type="date" [(ngModel)]="field.to_date" 
                   *ngIf="field.field_type==='date' && field.selectedFilter==='between'"
                   (ngModelChange)="filterValueChange($event, field, element)" />
-                  <!-- <span *ngIf="field.field_type==='number'">
-                  <span *ngFor="let nr of field.filter_number_values; let i=index">
-                    <input type="number" [id]="'number'+i" [(ngModel)]="field.filter_number_values[i]"
-                      (ngModelChange)="filterNumberValueChange($event, field, element)" />
-                    </span>
-                  </span> -->
               </td>
             </tr>
           </table>
