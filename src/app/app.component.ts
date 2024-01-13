@@ -44,10 +44,10 @@ export class AppComponent implements OnInit {
           element.filter_template = '';
           element.filter_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9];
           element.strRTW =
-            '{"RTW":' + JSON.stringify(this.rtw.RTW, null, '  ') + '}';
+          this.jsonFormatter(this.rtw.RTW,4);
           console.log(element.strRTW);
 
-          element.RTW = JSON.parse(JSON.stringify(this.rtw.RTW, null, '  '));
+          element.RTW = JSON.parse(JSON.stringify(this.rtw.RTW));
           element.RTW.PAYLOAD.request_name = element.table_name;
           element.fields.forEach((field: any) => {
             field.checked = false;
@@ -62,11 +62,15 @@ export class AppComponent implements OnInit {
       });
   }
 
-  templateChange(event: any, element: any) {
-    element.strRTW = '{"RTW":' + JSON.stringify(element.RTW, null, '  ') + '}';
+  jsonFormatter(jsonText:string, indent:number): string {
+    return  '{"RTW":' + JSON.stringify(jsonText, null, indent) + '}';
   }
 
-  buttonClick(event: any, element: any) {
+  templateChange(event: any, element: any) {
+    element.strRTW = this.jsonFormatter(element.RTW,4);
+  }
+
+  getFromDB(event: any, element: any) {
     const header = { withCredentials: false };
     this.http
       .post(
@@ -96,7 +100,7 @@ export class AppComponent implements OnInit {
       element.RTW.PAYLOAD.fields = element.RTW.PAYLOAD.fields.filter(
         (f: string) => f !== field.field_name
       );
-    element.strRTW = '{"RTW":' + JSON.stringify(element.RTW, null, '  ') + '}';
+    element.strRTW = this.jsonFormatter(element.RTW,4);
   }
 
   selectChange(event: any, field: any, element: any) {
@@ -120,8 +124,8 @@ export class AppComponent implements OnInit {
           return e.field !== field.field_name;
         }
       );
-      element.strRTW =
-        '{"RTW":' + JSON.stringify(element.RTW, null, '  ') + '}';
+      element.strRTW = this.jsonFormatter(element.RTW,4);
+       
     }
 
     const splitCount = field.selectedFilter === 'between' ? 2 : 50;
@@ -159,7 +163,7 @@ export class AppComponent implements OnInit {
         id: element.filter_ids.shift(),
       });
     }
-    element.strRTW = '{"RTW":' + JSON.stringify(element.RTW, null, '  ') + '}';
+    element.strRTW = this.jsonFormatter(element.RTW,4);
   }
 
   getFilterId(element: any, field_name: string): number {

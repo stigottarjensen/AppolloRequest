@@ -10,7 +10,7 @@
             }}</span>
           <input type="text" id="filter_template" *ngIf="element.open" [(ngModel)]="element.RTW.PAYLOAD.template"
             (ngModelChange)="templateChange($event, element)" />
-          <button (click)="buttonClick($event, element)">Get data</button>
+          <button (click)="getFromDB($event, element)">Get data</button>
         </div>
         <div class="container" *ngIf="element.open">
           <table>
@@ -37,7 +37,7 @@
               </td>
             </tr>
           </table>
-          <div>{{element.strRTW}}</div>
+          <div class="the_json"><pre>{{element.strRTW}}</pre></div>
         </div>
       </div>
     </div>

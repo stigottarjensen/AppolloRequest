@@ -16,6 +16,14 @@ div {
     margin:10px;
   }
 
+  .the_json {
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgb(193, 238, 238);
+    background-color: rgb(253, 234, 239);
+    margin-left: 15px;
+  }
+
   input {
     width: 200px;
     height: 30px;
