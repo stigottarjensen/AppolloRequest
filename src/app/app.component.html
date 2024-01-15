@@ -8,12 +8,18 @@
         </div>
         <div class="container"><span (click)="element.open=!element.open">{{ element.table_name }}&nbsp;&nbsp;{{ element.table_type
             }}</span>
-          <input type="text" id="filter_template" *ngIf="element.open" [(ngModel)]="element.RTW.PAYLOAD.template"
+            <span *ngIf="element.open">SQL WHERE template 1-9|&()
+          <input type="text" id="filter_template" [(ngModel)]="element.RTW.PAYLOAD.template"
             (ngModelChange)="templateChange($event, element)" />
-          <button (click)="getFromDB($event, element)">Get data</button>
+          </span>
+          <button (click)="getFromDB($event, element)" *ngIf="element.open">Hent data</button>
         </div>
         <div class="container" *ngIf="element.open">
           <table>
+            <tr>
+              <th>DBFelt</th><th>Type</th><th>Velg</th>
+              <th>TemplateNr</th><th>Filtertype</th><th>Filterverdi</th>
+            </tr>
             <tr *ngFor="let field of element.fields">
               <td>{{field.field_name}}</td>
               <td>{{field.field_type}}</td>

@@ -7,13 +7,22 @@ div {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
+  span {
+    background-color: rgb(230, 240, 241);
+    margin-left: 25px;
+    margin-right: 10px;
+    padding: 3px;
+  }
+
   .response {
     color: yellow;
     background-color: darkmagenta;
   }
 
   button {
-    margin:10px;
+    margin-left:10px;
+    height:30px;
+    font-size: 18px;
   }
 
   .the_json {
@@ -24,6 +33,13 @@ div {
     margin-left: 15px;
   }
 
+  td {
+    border-width:1px;
+    border-style: solid;
+    margin:0px;
+    padding: 3px;
+  }
+
   input {
     width: 200px;
     height: 30px;
@@ -32,7 +48,6 @@ div {
     background-color: #fdf8f0;
     color: rgb(10, 9, 9);
     outline-width: 1px;
-    margin-left: 25px;
   }
 
   div > input {
@@ -48,8 +63,6 @@ div {
     background-color: #e5f2ee;
     color: rgb(10, 9, 9);
     outline-width: 2px;
-    margin-right: 5px;
-    margin-left: 15px;
   }
 
   .container {
